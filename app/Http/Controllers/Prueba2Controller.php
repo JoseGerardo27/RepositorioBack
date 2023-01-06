@@ -34,7 +34,6 @@ class Prueba2Controller extends Controller
     {
         try {
             $Nuevo = $request->id ? Prueba2::find($request->id) : new Prueba2;
-            $Nuevo->id = $request->id;
             $Nuevo->Numero = $request->Numero;
             $Nuevo->Pais = $request->Pais;
             $Nuevo->Estado = $request->Estado;

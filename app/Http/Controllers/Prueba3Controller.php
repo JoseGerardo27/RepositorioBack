@@ -14,6 +14,9 @@ class Prueba3Controller extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+
+
     public function index(Request $r)
     {
 
@@ -35,7 +38,6 @@ class Prueba3Controller extends Controller
     {
         try{
             $Nuevo= $request->id?prueba3::find($request->id): new prueba3;
-            $Nuevo->id=$request->id;
             $Nuevo->Numero=$request->Numero;
             $Nuevo->Deporte=$request->Deporte;
             $Nuevo->save();

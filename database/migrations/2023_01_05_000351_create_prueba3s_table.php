@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('prueba3s', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('Numero')->unsigned();
-            $table->string('Deporte');
+            $table->integer('Deporte');
             $table->foreign('Numero')->references('Numero')->on('prueba1s')->onDelete('cascade');
         });
     }

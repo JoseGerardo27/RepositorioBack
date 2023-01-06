@@ -9,6 +9,12 @@ use Illuminate\Http\Request;
 
 class FiltersP
 {
+    public function __construct()
+     {
+        $this-> Deportes =[8=>'Baloncesto', 7=>'Golf',6=>'Futbol Americano',5=>'Voleibol',4=>'Tenis',3=>'Beisbol',
+        2=>'Cricket',1=>'Futbol'];
+     }
+     
     public function FilterP(Request $r)
     {
         $w = (new prueba1)->newQuery();
