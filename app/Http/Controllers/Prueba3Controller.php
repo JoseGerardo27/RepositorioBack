@@ -16,7 +16,13 @@ class Prueba3Controller extends Controller
      */
     public function index(Request $r)
     {
-        return $w =(new FiltersP)->FilterP3($r);
+
+        try{
+            $w =(new FiltersP)->FilterP3($r);
+            return response()->json(['status'=>200,'response'=>$w]);
+           }catch(Exception $e){
+               return response()->json(['status'=>500,'response'=>$e]);
+           }
     }
 
     /**

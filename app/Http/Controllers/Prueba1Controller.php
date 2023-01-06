@@ -18,7 +18,8 @@ class Prueba1Controller extends Controller
     public function index(Request $r)
     {
         try{
-     return $w =(new FiltersP)->FilterP($r);
+     $w =(new FiltersP)->FilterP($r);
+     return response()->json(['status'=>200,'response'=>$w]);
     }catch(Exception $e){
         return response()->json(['status'=>500,'response'=>$e]);
     }
