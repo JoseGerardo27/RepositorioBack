@@ -14,7 +14,7 @@ class FiltersP
         $this-> Deportes =[8=>'Baloncesto', 7=>'Golf',6=>'Futbol Americano',5=>'Voleibol',4=>'Tenis',3=>'Beisbol',
         2=>'Cricket',1=>'Futbol'];
      }
-     
+
     public function FilterP(Request $r)
     {
         $w = (new prueba1)->newQuery();
@@ -45,6 +45,10 @@ class FiltersP
         !$r->Nombre ?: $w->where('Nombre', 'like', '%' . $r->Nombre . '%'); // Los . nos sirven para concatenar
         !$r->Default ?: $w->where('Default', $r->Default);
         $w = $w->get();
+        foreach($w as $wa)
+        {
+            $wa->NombreDeporte=$this->Deportes[$wa->Deporte];
+        }
         return $w;
     }
 }
