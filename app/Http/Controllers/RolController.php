@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Filters\Search\FiltersP;
-use Illuminate\Http\Request;
-use App\Models\prueba1;
+use App\Models\Rol;
 use Error;
 use Exception;
+use Illuminate\Http\Request;
 
-class Prueba1Controller extends Controller
+class RolController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,7 +18,7 @@ class Prueba1Controller extends Controller
     public function index(Request $r)
     {
         try {
-            $w = (new FiltersP)->FilterP($r);
+            $w = (new FiltersP)->FilterRol($r);
             return response()->json(['status' => 200, 'response' => $w]);
         } catch (Exception $e) {
             return response()->json(['status' => 500, 'response' => $e]);
@@ -33,18 +33,17 @@ class Prueba1Controller extends Controller
      */
     public function store(Request $request)
     {
-        // $resultado = $condicion ? 'verdadero' : 'falso';
-        // $resultado = $valor ?: 'defecto';
-        try {
-            $Nuevo = $request->id ? Prueba1::find($request->id) : new Prueba1;
-            $Nuevo->Numero = $request->Numero;
-            $Nuevo->Nombre = $request->Nombre;
-            $Nuevo->Descripcion = $request->Descripcion;
+        try{
+            $Nuevo= $request->id?Rol::find($request->id): new Rol();
+            $Nuevo->idEncargado=$request->idEncargado;
+            $Nuevo->nombre=$request->nombre;
+            $Nuevo->rol=$request->rol;
+            $Nuevo->descripcion=$request->descripcion;
             $Nuevo->save();
-            return response()->json(['status' => 200, 'response' => 'insertado correctamente']);
-        } catch (Exception $e) {
-            return response()->json(['status' => 500, 'response' => $e]);
-        }
+            return response()->json(['status'=>200,'response'=>'insertado correctamente']);
+            }catch(Exception $e){
+                return response()->json(['status'=>500,'response'=>$e]);
+            }
     }
 
     /**
@@ -55,6 +54,7 @@ class Prueba1Controller extends Controller
      */
     public function show($id)
     {
+        //
     }
 
     /**
@@ -77,16 +77,6 @@ class Prueba1Controller extends Controller
      */
     public function destroy($id)
     {
-        try {
-            $eliminar = prueba1::find($id);
-
-            $eliminar->delete();
-            return response()->json([
-                'res' => true,
-                'mensaje' => 'eliminado correctamente'
-            ], 200);
-        } catch (Exception $e) {
-            return response()->json(['status' => 500, 'response' => $e]);
-        }
+        //
     }
 }

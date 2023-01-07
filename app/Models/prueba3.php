@@ -13,6 +13,6 @@ class prueba3 extends Model
 
     protected $fillable= [
         'Numero',
-        'Deporte',
+        'Deporte'
     ];
 }

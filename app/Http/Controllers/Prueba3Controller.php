@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Filters\Search\FiltersP;
 use App\Models\prueba3;
+use Error;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -23,7 +24,7 @@ class Prueba3Controller extends Controller
         try{
             $w =(new FiltersP)->FilterP3($r);
             return response()->json(['status'=>200,'response'=>$w]);
-           }catch(Exception $e){
+           }catch(Error $e){
                return response()->json(['status'=>500,'response'=>$e]);
            }
     }
