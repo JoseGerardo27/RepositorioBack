@@ -76,7 +76,7 @@ class FiltersP
         $w = $w->get();
         foreach($w as $wa)
         {
-           $wa->rol =$wa->rol<9?$this->Roles[$wa->rol]:'El rol no existe';
+           $wa->nombre_rol =$wa->rol<9?$this->Roles[$wa->rol]:'El rol no existe';
         }
         return $w;
     }
