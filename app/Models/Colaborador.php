@@ -12,7 +12,7 @@ class Colaborador extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'id', 'nombre', 'departamento', 'doc_index', 'id_rol'
+        'id', 'nombre', 'departamento', 'doc_index', 'id_rol', 'folio'
     ];
 
     public function Roles()

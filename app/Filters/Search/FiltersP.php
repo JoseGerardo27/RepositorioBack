@@ -63,6 +63,7 @@ class FiltersP
         !$r->nombre ?: $w->where('nombre', 'like', '%' . $r->nombre . '%');
         !$r->departamento ?: $w->where('departamento', 'like', '%' . $r->departamento . '%'); // Los . nos sirven para concatenar
         !$r->id_rol ?: $w->where('id_rol', $r->id_rol);
+        !$r->folio ?: $w->where('folio', $r->folio);
         $w = $w->with('Roles')->get();
         return $w;
     }

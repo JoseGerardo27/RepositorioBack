@@ -47,7 +47,6 @@ use Illuminate\Support\Facades\Storage;
 
     //imagen
     Route::get('/show_index',[ColaboradorController::class,'NuevoDocumento'])->name('show_index');
-    Route::post('/new_file',[Colaborador::class,'FileSave'])->name('new_file');
     Route::post('/delete_file_index',[ColaboradorController::class,'DeleteIndex'])->name('delete_file_index');
 });
 

@@ -31,18 +31,34 @@ class ColaboradorController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $r)
     {
         try{
-            $Nuevo= $request->id?Colaborador::find($request->id): new Colaborador();
-            $Nuevo->departamento=$request->departamento;
-            $Nuevo->nombre=$request->nombre;
-            $Nuevo->id_rol=$request->id_rol; //id_rol
+            $Nuevo= $r->id?Colaborador::find($r->id): new Colaborador();
+            $Nuevo->departamento=$r->departamento;
+            $Nuevo->nombre=$r->nombre;
+            $Nuevo->id_rol=$r->id_rol; //id_rol
             $Nuevo->save();
+            //Aqui comienza funcion guardar imagen
+            $fm = Colaborador::all()->count();
+            $n = 1;
+            if (empty($Nuevo->folio)) {
+                do {
+                    $Nuevo->folio = 'AV-' . str_pad($fm + $n, 4, "0", STR_PAD_LEFT);
+                    $n++;
+                } while (!empty(Colaborador::where('folio', $Nuevo->folio)->first()));
+                $Nuevo->save();
+            }
+            if ($r->image) {
+                $m = $this->FileSave($Nuevo->doc_index, $r->image, $r->doc_index, $Nuevo->folio);
+                $Nuevo->doc_index = $m;
+                $Nuevo->save();
+            }
             return response()->json(['status'=>200,'response'=>'insertado correctamente']);
             }catch(Exception $e){
                 return response()->json(['status'=>500,'response'=>$e]);
             }
+
     }
 
     /**
