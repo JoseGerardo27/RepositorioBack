@@ -62,6 +62,7 @@ class FiltersP
         !$r->id ?: $w->where('id', $r->id);
         !$r->nombre ?: $w->where('nombre', 'like', '%' . $r->nombre . '%');
         !$r->departamento ?: $w->where('departamento', 'like', '%' . $r->departamento . '%'); // Los . nos sirven para concatenar
+        !$r->id_rol ?: $w->where('id_rol', $r->id_rol);
         $w = $w->with('Roles')->get();
         return $w;
     }
@@ -70,7 +71,6 @@ class FiltersP
     {
         $w = (new Rol)->newQuery();
         !$r->id ?: $w->where('id', $r->id);
-        !$r->idEncargado ?: $w->where('idEncargado', $r->idEncargado);
         !$r->nombre ?: $w->where('nombre', 'like', '%' . $r->nombre . '%');
         !$r->rol ?: $w->where('rol', $r->rol);
         $w = $w->get();

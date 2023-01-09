@@ -12,11 +12,11 @@ class Colaborador extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'id', 'nombre', 'departamento'
+        'id', 'nombre', 'departamento', 'doc_index', 'id_rol'
     ];
 
     public function Roles()
     {
-        return $this->hasMany(Rol::class, 'idEncargado', 'id');
+        return $this->hasMany(Rol::class, 'id', 'id_rol');
     }
 }

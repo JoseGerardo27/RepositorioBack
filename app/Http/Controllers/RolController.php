@@ -7,6 +7,10 @@ use App\Models\Rol;
 use Error;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
+
+Storage::disk('local')->put('example.txt', 'Contents');
 
 class RolController extends Controller
 {
@@ -35,7 +39,6 @@ class RolController extends Controller
     {
         try{
             $Nuevo= $request->id?Rol::find($request->id): new Rol();
-            $Nuevo->idEncargado=$request->idEncargado;
             $Nuevo->nombre=$request->nombre;
             $Nuevo->rol=$request->rol;
             $Nuevo->descripcion=$request->descripcion;

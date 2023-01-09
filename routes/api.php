@@ -5,10 +5,13 @@ use App\Http\Controllers\Prueba1Controller;
 use App\Http\Controllers\Prueba2Controller;
 use App\Http\Controllers\Prueba3Controller;
 use App\Http\Controllers\RolController;
+use App\Models\Colaborador;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\prueba1;
 use App\Models\prueba2;
+use Illuminate\Support\Facades\Storage;
+
 /* use App\Http\Controllers\Prueba1Controller; */
 
 /*
@@ -23,8 +26,8 @@ use App\Models\prueba2;
 */
 
 
-  // Middleware para enviar todas las routes Web
-Route::middleware('api')->group(function() {
+    // Middleware para enviar todas las routes Web
+    Route::middleware('api')->group(function() {
     //Mostrar registros
     Route::get('/prueba1',[Prueba1Controller::class, 'index'])->name('prueba1');
     Route::get('/prueba2',[Prueba2Controller::class, 'index2'])->name('prueba2');
@@ -41,6 +44,11 @@ Route::middleware('api')->group(function() {
     Route::delete('/eliminar/{id}',[Prueba1Controller::class, 'destroy'])->name('eliminar');
     Route::delete('/eliminar2/{id}',[Prueba2Controller::class, 'destroy'])->name('eliminar2');
     Route::delete('/eliminar3/{id}',[Prueba3Controller::class, 'destroy'])->name('eliminar3');
+
+    //imagen
+    Route::get('/show_index',[ColaboradorController::class,'NuevoDocumento'])->name('show_index');
+    Route::post('/new_file',[Colaborador::class,'FileSave'])->name('new_file');
+    Route::post('/delete_file_index',[ColaboradorController::class,'DeleteIndex'])->name('delete_file_index');
 });
 
 

@@ -13,7 +13,7 @@ class Rol extends Model
     public $timestamps =false ;
 
     protected $fillable = [
-        'id', 'idEncargado','encargado', 'nombre', 'descripcion'
+        'id', 'encargado', 'nombre', 'descripcion'
     ];
 
 }
