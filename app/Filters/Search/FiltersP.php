@@ -65,6 +65,14 @@ class FiltersP
         !$r->id_rol ?: $w->where('id_rol', $r->id_rol);
         !$r->folio ?: $w->where('folio', $r->folio);
         $w = $w->with('Roles')->get();
+        // Para imprimir el rol de otra tabla
+        foreach($w as $wa)
+        {
+            foreach($wa->Roles as $Roles)
+            {
+                $Roles->NameRol = $this-> Roles [$Roles->rol];
+            }
+        }
         return $w;
     }
 
