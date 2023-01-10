@@ -31,13 +31,13 @@ class ListaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $r)
     {
         try {
-            $Nuevo = $request->id ? Lista::find($request->id) : new Lista;
-            $Nuevo->nombre = $request->nombre;
-            $Nuevo->numero = $request->numero;
-            $Nuevo->equipo = $request->equipo;
+            $Nuevo = $r['listas']['id']? Lista::find($r['listas']['id']) : new Lista;
+            $Nuevo->nombre = $r['listas']['nombre'];
+            $Nuevo->numero = $r['listas']['numero'];
+            $Nuevo->equipo = $r['listas']['equipo'];
             $Nuevo->save();
             return response()->json(['status' => 200, 'response' => 'insertado correctamente']);
         } catch (Exception $e) {
