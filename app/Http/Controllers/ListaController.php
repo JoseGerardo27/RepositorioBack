@@ -34,10 +34,10 @@ class ListaController extends Controller
     public function store(Request $r)
     {
         try {
-            $Nuevo = $r['listas']['id']? Lista::find($r['listas']['id']) : new Lista;
-            $Nuevo->nombre = $r['listas']['nombre'];
-            $Nuevo->numero = $r['listas']['numero'];
-            $Nuevo->equipo = $r['listas']['equipo'];
+            $Nuevo = $r['mostrarLista']['id']? Lista::find($r['mostrarLista']['id']) : new Lista;
+            $Nuevo->nombre = $r['mostrarLista']['nombre'];
+            $Nuevo->numero = $r['mostrarLista']['numero'];
+            $Nuevo->equipo = $r['mostrarLista']['equipo'];
             $Nuevo->save();
             return response()->json(['status' => 200, 'response' => 'insertado correctamente']);
         } catch (Exception $e) {
