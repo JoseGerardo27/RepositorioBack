@@ -3,6 +3,7 @@
 namespace App\Filters\Search;
 
 use App\Models\Colaborador;
+use App\Models\Lista;
 use App\Models\prueba1;
 use App\Models\Prueba2;
 use App\Models\prueba3;
@@ -87,6 +88,17 @@ class FiltersP
         {
            $wa->nombre_rol =$wa->rol<9?$this->Roles[$wa->rol]:'El rol no existe';
         }
+        return $w;
+    }
+
+    public function FilterLista(Request $r)
+    {
+        $w = (new Lista)->newQuery();
+        !$r->numero ?: $w->where('numero', $r->Numero);
+        !$r->id ?: $w->where('id', $r->id);
+        !$r->equipo ?: $w->where('equipo', $r->Deporte);
+        !$r->nombre ?: $w->where('nombre', 'like', '%' . $r->nombre . '%');
+        $w = $w->get();
         return $w;
     }
 }
