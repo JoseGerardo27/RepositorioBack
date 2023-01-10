@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('departamento');
             $table->string('doc_index')->nullable();
             $table->unsignedInteger('id_rol')->unsigned();
-            $table->string('folio');
+            $table->string('folio')->nullable();
             $table->foreign('id_rol')->references('id')->on('rols')->onDelete('cascade'); // Padre e hijo eliminados
         });
     }
