@@ -33,13 +33,16 @@ class ListaController extends Controller
      */
     public function store(Request $r)
     {
+        //Hacer Foreach
         try {
-            $Nuevo = $r['mostrarLista']['id']? Lista::find($r['mostrarLista']['id']) : new Lista;
-            $Nuevo->nombre = $r['mostrarLista']['nombre'];
-            $Nuevo->numero = $r['mostrarLista']['numero'];
-            $Nuevo->equipo = $r['mostrarLista']['equipo'];
-            $Nuevo->save();
-            return response()->json(['status' => 200, 'response' => 'insertado correctamente']);
+            foreach ($r['mostrarLista'] as $New) {
+                $Nuevo = $New['id'] ? Lista::find($New['id']) : new Lista;
+                $Nuevo->nombre = $New['nombre'];
+                $Nuevo->numero = $New['numero'];
+                $Nuevo->equipo = $New['equipo'];
+                $Nuevo->save();
+                return response()->json(['status' => 200, 'response' => 'insertado correctamente']);
+            }
         } catch (Error $e) {
             return response()->json(['status' => 500, 'response' => $e]);
         }
