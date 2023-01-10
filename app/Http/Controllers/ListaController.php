@@ -41,8 +41,8 @@ class ListaController extends Controller
                 $Nuevo->numero = $New['numero'];
                 $Nuevo->equipo = $New['equipo'];
                 $Nuevo->save();
-                return response()->json(['status' => 200, 'response' => 'insertado correctamente']);
-            }
+              }
+            return response()->json(['status' => 200, 'response' => 'insertado correctamente']);
         } catch (Error $e) {
             return response()->json(['status' => 500, 'response' => $e]);
         }
