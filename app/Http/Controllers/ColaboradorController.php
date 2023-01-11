@@ -31,13 +31,43 @@ class ColaboradorController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+     /////////////////////////////////////////////Para un solo documento////////////////////////////////////////////////////////
+    // public function store(Request $r)
+    // {
+    //     try {
+    //         $Nuevo = $r->id ? Colaborador::find($r->id) : new Colaborador();
+    //         $Nuevo->departamento = $r->departamento;
+    //         $Nuevo->nombre = $r->nombre;
+    //         $Nuevo->id_rol = $r->id_rol; //id_rol
+    //         $Nuevo->save();
+    //         //Aqui comienza funcion guardar imagen
+    //         $fm = Colaborador::all()->count();
+    //         $n = 1;
+    //         if (empty($Nuevo->folio)) {
+    //             do {
+    //                 $Nuevo->folio = 'AV-' . str_pad($fm + $n, 4, "0", STR_PAD_LEFT);
+    //                 $n++;
+    //             } while (!empty(Colaborador::where('folio', $Nuevo->folio)->first()));
+    //             $Nuevo->save();
+    //         }
+    //         if ($r->image) {
+    //             $m = $this->FileSave($Nuevo->doc_index, $r->image, $r->doc_index, $Nuevo->folio);
+    //             $Nuevo->doc_index = $m;
+    //             $Nuevo->save();
+    //         }
+    //         return response()->json(['status' => 200, 'response' => 'insertado correctamente']);
+    //     } catch (Exception $e) {
+    //         return response()->json(['status' => 500, 'response' => $e]);
+    //     }
+    // }
     public function store(Request $r)
     {
-        try{
-            $Nuevo= $r->id?Colaborador::find($r->id): new Colaborador();
-            $Nuevo->departamento=$r->departamento;
-            $Nuevo->nombre=$r->nombre;
-            $Nuevo->id_rol=$r->id_rol; //id_rol
+        try {
+            $Nuevo = $r->id ? Colaborador::find($r->id) : new Colaborador();
+            $Nuevo->departamento = $r->departamento;
+            $Nuevo->nombre = $r->nombre;
+            $Nuevo->id_rol = $r->id_rol; //id_rol
             $Nuevo->save();
             //Aqui comienza funcion guardar imagen
             $fm = Colaborador::all()->count();
@@ -49,17 +79,45 @@ class ColaboradorController extends Controller
                 } while (!empty(Colaborador::where('folio', $Nuevo->folio)->first()));
                 $Nuevo->save();
             }
-            if ($r->image) {
-                $m = $this->FileSave($Nuevo->doc_index, $r->image, $r->doc_index, $Nuevo->folio);
-                $Nuevo->doc_index = $m;
-                $Nuevo->save();
+            if ($r->doc_index) {
+                foreach ($r->doc_index as $value) {
+                    $a = $this->FileSaveMultiples($Nuevo->doc_index, $value->nombre, $value->base, $Nuevo->folio);
+                    if ($a) {
+                        $lc[] = $a;
+                    }
+                }
+                $Nuevo->doc_index = json_encode($lc);
             }
-            return response()->json(['status'=>200,'response'=>'insertado correctamente']);
-            }catch(Exception $e){
-                return response()->json(['status'=>500,'response'=>$e]);
-            }
-
+            // if ($r->image) {
+            //     $m = $this->FileSave($Nuevo->doc_index, $r->image, $r->doc_index, $Nuevo->folio);
+            //     $Nuevo->doc_index = $m;
+            //     $Nuevo->save();
+            // }
+            // Se utiliza cuando utilizas 1
+            return response()->json(['status' => 200, 'response' => 'insertado correctamente']);
+        } catch (Exception $e) {
+            return response()->json(['status' => 500, 'response' => $e]);
+        }
     }
+
+
+   public function FileSaveMultiples($originaldoc, $nombre, $base, $id_doc)
+    {
+        try {
+            if ($base) {
+                $ext = explode('.', $nombre);
+                $data = base64_decode($base);
+                Storage::disk('dms')->put('/' . $id_doc . '_doc/' . $nombre, $data);
+                return $nombre;
+            }
+            return $nombre;
+        } catch (Exception $e) {
+            return response()->json(['status' => 500, 'response' => 'Error al insertar los datos: alguno de los campos no fue enviado correctamente para la inserccion de documento adjunto.']);
+        }
+    }
+
+
+
 
     /**
      * Display the specified resource.
@@ -105,7 +163,7 @@ class ColaboradorController extends Controller
         try {
             $an = Colaborador::find($r->id);
             Storage::disk('workers')->delete($an->doc_index);
-            $an->doc_index='';
+            $an->doc_index = '';
             $an->save();
             return response()->json(['status' => 200, 'response' => 'indexado eliminado correctamente']);
         } catch (Exception $e) {
