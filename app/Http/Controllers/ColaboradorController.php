@@ -115,11 +115,13 @@ class ColaboradorController extends Controller
                 $Nuevo->save();
             }
             if ($r->doc_index) {
+                $n = 1;
                 foreach ($r['doc_index'] as $value) {
-                    $a = $this->FileSaveMultiples($Nuevo->doc_index, $value['nombre'], $value['base64'], $Nuevo->folio);
+                    $a = $this->FileSaveMultiples($Nuevo->doc_index, $value['nombre'], $value['base64'], $Nuevo->folio, $n);
                     if ($a) {
                         $lc[] = $a;
                     }
+                    $n++;
                 }
                 $Nuevo->doc_index = json_encode($lc);
                 $Nuevo->save();
@@ -131,16 +133,15 @@ class ColaboradorController extends Controller
     }
 
 
-    public function FileSaveMultiples($originaldoc, $nombre, $base, $id_doc)
+    public function FileSaveMultiples($originaldoc, $nombre, $base, $id_doc, $n)
     {
         try {
             if ($base) {
                 $ext = explode('.', $nombre);
                 $data = base64_decode($base);
-                Storage::disk('dms')->put('/' . $id_doc . '_doc/' . $nombre, $data);
-                return $nombre;
+                Storage::disk('workers')->put('/' . $id_doc . '_doc/' . $id_doc.'-'.$n.'.'.$ext[1], $data);
+                return $id_doc.'-'.$n.'.'.$ext[1];
             }
-            return $nombre;
         } catch (Exception $e) {
             return response()->json(['status' => 500, 'response' => 'Error al insertar los datos: alguno de los campos no fue enviado correctamente para la inserccion de documento adjunto.']);
         }
