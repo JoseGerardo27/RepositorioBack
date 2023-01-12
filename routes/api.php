@@ -33,9 +33,12 @@ use Illuminate\Support\Facades\Storage;
     Route::get('/prueba1',[Prueba1Controller::class, 'index'])->name('prueba1');
     Route::get('/prueba2',[Prueba2Controller::class, 'index2'])->name('prueba2');
     Route::get('/prueba3',[Prueba3Controller::class, 'index'])->name('prueba3');
-    Route::get('/colaboradores',[ColaboradorController::class, 'index'])->name('colaboradores');
+    Route::get('/colaboradores',[ColaboradorController::class, 'index2'])->name('colaboradores');
     Route::get('/roles',[RolController::class, 'index'])->name('roles');
     Route::get('/listas',[ListaController::class, 'index'])->name('listas');
+    //PDF
+    Route::get('/PDF',[ColaboradorController::class, 'downloadPdf'])->name('PDF');
+    Route::get('/PDFx1',[ColaboradorController::class, 'downloadPdfx1'])->name('PDF');
 
     //Crear
     Route::post('/newprueba1',[Prueba1Controller::class, 'store'])->name('newprueba1');
@@ -52,6 +55,8 @@ use Illuminate\Support\Facades\Storage;
 
     //imagen
     Route::get('/show_index',[ColaboradorController::class,'NuevoDocumento'])->name('show_index');
+    Route::post('/delete_file_index',[ColaboradorController::class,'DeleteIndex'])->name('delete_file_index');
+
     Route::post('/delete_file_index',[ColaboradorController::class,'DeleteIndex'])->name('delete_file_index');
 });
 

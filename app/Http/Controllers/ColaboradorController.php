@@ -7,6 +7,8 @@ use App\Models\Colaborador;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade\PDF;
+use Error;
 
 class ColaboradorController extends Controller
 {
@@ -17,12 +19,44 @@ class ColaboradorController extends Controller
      */
     public function index(Request $r)
     {
+        $colaboradores = Colaborador::all();
+        return view('colaborador.Dom-PDF')->with('colaboradores', $colaboradores); // tener cuidado al refenciar variables
+    }
+
+    public function index2(Request $r)
+    {
         try {
             $w = (new FiltersP)->FilterColab($r);
             return response()->json(['status' => 200, 'response' => $w]);
         } catch (Exception $e) {
             return response()->json(['status' => 500, 'response' => $e]);
         }
+    }
+
+    // Todos los Colaboradores
+    public function downloadPdf(Request $r)
+    {
+        $colaboradores = (new FiltersP)->FilterColab($r);
+        $colabs = [
+            'user' => $colaboradores
+        ];
+        $pdf = PDF::loadView('Download', $colabs);
+        $namepdf = 'PDF'; //$colaboradores->folio . '_' . $colaboradores->created_at->format('d-m-y') . '.pdf';
+        $pdf->setPaper("Legal", "landscape");
+        return $pdf->stream($namepdf);
+    }
+
+    // Un solo colaborador
+    public function downloadPdfx1(Request $r)
+    {
+        $colaboradores = (new FiltersP)->FilterColab($r);
+        $colabs = [
+            'user' => $colaboradores
+        ];
+        $pdf = PDF::loadView('Download', $colabs);
+        $namepdf = 'PDF'; //$colaboradores->folio . '_' . $colaboradores->created_at->format('d-m-y') . '.pdf';
+        $pdf->setPaper("Legal", "landscape");
+        return $pdf->stream($namepdf);
     }
 
     /**
@@ -32,7 +66,7 @@ class ColaboradorController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-     /////////////////////////////////////////////Para un solo documento////////////////////////////////////////////////////////
+    /////////////////////////////////////////////Para un solo documento////////////////////////////////////////////////////////
     // public function store(Request $r)
     // {
     //     try {
@@ -61,6 +95,7 @@ class ColaboradorController extends Controller
     //         return response()->json(['status' => 500, 'response' => $e]);
     //     }
     // }
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public function store(Request $r)
     {
         try {
@@ -88,20 +123,14 @@ class ColaboradorController extends Controller
                 }
                 $Nuevo->doc_index = json_encode($lc);
             }
-            // if ($r->image) {
-            //     $m = $this->FileSave($Nuevo->doc_index, $r->image, $r->doc_index, $Nuevo->folio);
-            //     $Nuevo->doc_index = $m;
-            //     $Nuevo->save();
-            // }
-            // Se utiliza cuando utilizas 1
             return response()->json(['status' => 200, 'response' => 'insertado correctamente']);
-        } catch (Exception $e) {
+        } catch (Error $e) {
             return response()->json(['status' => 500, 'response' => $e]);
         }
     }
 
 
-   public function FileSaveMultiples($originaldoc, $nombre, $base, $id_doc)
+    public function FileSaveMultiples($originaldoc, $nombre, $base, $id_doc)
     {
         try {
             if ($base) {

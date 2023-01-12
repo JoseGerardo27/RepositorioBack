@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\ColaboradorController;
+use App\Models\Colaborador;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,7 +15,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('{any}', function () {
-    return view('welcome');
+Route::get('/pdf', function () {
+    $colaboradores = Colaborador::all();
+    return view('Dom-PDF')->with('colaboradores',$colaboradores);;
+});
+
+Route::get('/pdf', function () {
+    $colaboradores = Colaborador::all();
+    return view('Dom-PDF')->with('colaboradores',$colaboradores);;
+});
+
+Route::get('/', function () {
+    return view('app');
 })->where('any', '.*');
 
+Route::get('download-pdf', [ColaboradorController::class, 'downloadPdf'])->name('download-pdf');

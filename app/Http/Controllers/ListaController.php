@@ -7,6 +7,7 @@ use App\Models\Lista;
 use Error;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ListaController extends Controller
 {
@@ -34,6 +35,7 @@ class ListaController extends Controller
     public function store(Request $r)
     {
         //Hacer Foreach
+        DB::beginTransaction();
         try {
             foreach ($r['mostrarLista'] as $New) {
                 $Nuevo = $New['id'] ? Lista::find($New['id']) : new Lista;
@@ -42,8 +44,10 @@ class ListaController extends Controller
                 $Nuevo->equipo = $New['equipo'];
                 $Nuevo->save();
               }
+              DB::commit();
             return response()->json(['status' => 200, 'response' => 'insertado correctamente']);
-        } catch (Error $e) {
+        } catch (Exception $e) {
+            DB::rollBack();
             return response()->json(['status' => 500, 'response' => $e]);
         }
     }
