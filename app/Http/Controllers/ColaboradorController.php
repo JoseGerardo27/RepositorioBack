@@ -116,7 +116,7 @@ class ColaboradorController extends Controller
             }
             if ($r->doc_index) {
                 foreach ($r->doc_index as $value) {
-                    $a = $this->FileSaveMultiples($Nuevo->doc_index, $value->nombre, $value->base, $Nuevo->folio);
+                    $a = $this->FileSaveMultiples($Nuevo->doc_index, $value->nombre, $value->base64, $Nuevo->folio);
                     if ($a) {
                         $lc[] = $a;
                     }
