@@ -21,6 +21,9 @@ return new class extends Migration
             $table->unsignedInteger('id_rol')->unsigned();
             $table->string('folio')->nullable();
             $table->foreign('id_rol')->references('id')->on('rols')->onDelete('cascade'); // Padre e hijo eliminados
+            $table->string('token');
+            $table->longText('contraseña');
+            $table->integer('sesion')->nullable();
         });
     }
 

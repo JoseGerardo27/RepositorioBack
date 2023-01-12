@@ -9,6 +9,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Barryvdh\DomPDF\Facade\PDF;
 use Error;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Str;
+use App\Models\Checks as Checks;
 
 class ColaboradorController extends Controller
 {
@@ -103,7 +106,9 @@ class ColaboradorController extends Controller
             $Nuevo->departamento = $r->departamento;
             $Nuevo->nombre = $r->nombre;
             $Nuevo->id_rol = $r->id_rol; //id_rol
-            $Nuevo->save();
+            $Nuevo->contraseña = Crypt::encryptString($r->contraseña);
+            $b = Str::random(40);
+            $Nuevo->token = $b;
             //Aqui comienza funcion guardar imagen
             $fm = Colaborador::all()->count();
             $n = 1;
@@ -127,10 +132,49 @@ class ColaboradorController extends Controller
                 $Nuevo->save();
             }
             return response()->json(['status' => 200, 'response' => 'insertado correctamente']);
-        } catch (Exception $e) {
+        } catch (Error $e) {
             return response()->json(['status' => 500, 'response' => $e]);
         }
     }
+
+// Inicio de Sesion
+    public function LoginS(Request $r)
+    {
+        try {
+            $w = Colaborador::where('id', $r->id)->first();
+            $dpass = Crypt::decryptString($w->contraseña);
+            if ($dpass == $r->contraseña) {
+                $w->token = Str::random(60);
+                $w->sesion = 1;
+                return response()->json(['status' => 200, 'response' =>  $w]);
+            } else {
+                return response()->json(['status' => 500, 'response' => 'Datos de inicio de sesión incorrectos']);
+            }
+        } catch (Exception $e) {
+            return response()->json(['status' => 500, 'response' => 'Error de Inicio de sesion']);
+        }
+    }
+
+// Cerrar Sesion
+public function Logout(Request $r){
+    try {
+        $w = Colaborador::where('id', $r->id)->first();
+        $dpass = Crypt::decryptString($w->contraseña);
+        if ($dpass == $r->contraseña) {
+            $w->token = Str::random(60);
+            $w->sesion = 0;
+            return response()->json(['status' => 200, 'response' => 'sesión cerrada']);
+        } else {
+            return response()->json(['status' => 500, 'response' => 'Datos de inicio de sesión incorrectos']);
+        }
+    } catch (Exception $e) {
+        return response()->json(['status' => 500, 'response' => 'Error de Inicio de sesion']);
+    }
+    }
+
+
+
+
 
 
     public function FileSaveMultiples($originaldoc, $nombre, $base, $id_doc, $n)
@@ -139,8 +183,8 @@ class ColaboradorController extends Controller
             if ($base) {
                 $ext = explode('.', $nombre);
                 $data = base64_decode($base);
-                Storage::disk('workers')->put('/' . $id_doc . '_doc/' . $id_doc.'-'.$n.'.'.$ext[1], $data);
-                return $id_doc.'-'.$n.'.'.$ext[1];
+                Storage::disk('workers')->put('/' . $id_doc . '_doc/' . $id_doc . '-' . $n . '.' . $ext[1], $data);
+                return $id_doc . '-' . $n . '.' . $ext[1];
             }
         } catch (Exception $e) {
             return response()->json(['status' => 500, 'response' => 'Error al insertar los datos: alguno de los campos no fue enviado correctamente para la inserccion de documento adjunto.']);

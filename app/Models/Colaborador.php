@@ -9,10 +9,10 @@ class Colaborador extends Model
 {
     use HasFactory;
     protected $table = 'colaboradors';
-    public $timestamps = false;
+    public $timestamps =false ; // Cuando no se utilice el timestamps hacerlo false
 
     protected $fillable = [
-        'id', 'nombre', 'departamento', 'doc_index', 'id_rol', 'folio'
+        'id', 'nombre', 'departamento', 'doc_index', 'id_rol', 'folio', 'token', 'contraseña', 'sesion'
     ];
 
     public function Roles()

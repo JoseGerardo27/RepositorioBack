@@ -58,6 +58,11 @@ use Illuminate\Support\Facades\Storage;
     Route::post('/delete_file_index',[ColaboradorController::class,'DeleteIndex'])->name('delete_file_index');
 
     Route::post('/delete_file_index',[ColaboradorController::class,'DeleteIndex'])->name('delete_file_index');
+
+    // LOGIN
+    Route::get('/LogIn',[ColaboradorController::class,'LoginS'])->name('LogIn');
+    Route::get('/LogOut',[ColaboradorController::class,'Logout'])->name('LogOut');
+
 });
 
 
