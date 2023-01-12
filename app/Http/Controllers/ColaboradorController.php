@@ -115,16 +115,17 @@ class ColaboradorController extends Controller
                 $Nuevo->save();
             }
             if ($r->doc_index) {
-                foreach ($r->doc_index as $value) {
-                    $a = $this->FileSaveMultiples($Nuevo->doc_index, $value->nombre, $value->base64, $Nuevo->folio);
+                foreach ($r['doc_index'] as $value) {
+                    $a = $this->FileSaveMultiples($Nuevo->doc_index, $value['nombre'], $value['base64'], $Nuevo->folio);
                     if ($a) {
                         $lc[] = $a;
                     }
                 }
                 $Nuevo->doc_index = json_encode($lc);
+                $Nuevo->save();
             }
             return response()->json(['status' => 200, 'response' => 'insertado correctamente']);
-        } catch (Error $e) {
+        } catch (Exception $e) {
             return response()->json(['status' => 500, 'response' => $e]);
         }
     }
