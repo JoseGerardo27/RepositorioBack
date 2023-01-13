@@ -163,12 +163,12 @@ public function Logout(Request $r){
         if ($dpass == $r->contraseña) {
             $w->token = Str::random(60);
             $w->sesion = 0;
-            return response()->json(['status' => 200, 'response' => 'sesión cerrada']);
+            return response()->json(['status' => 200, 'response' => 'Sesión cerrada']);
         } else {
-            return response()->json(['status' => 500, 'response' => 'Datos de inicio de sesión incorrectos']);
+            return response()->json(['status' => 500, 'response' => 'Datos para cerrar sesión incorrectos']);
         }
     } catch (Exception $e) {
-        return response()->json(['status' => 500, 'response' => 'Error de Inicio de sesion']);
+        return response()->json(['status' => 500, 'response' => 'Error al cerrar sesion']);
     }
     }
 
