@@ -146,12 +146,15 @@ class ColaboradorController extends Controller
             if ($dpass == $r->password) {
                 $w->token = Str::random(60);
                 $w->sesion = 1;
+                $Nuevo = $r->id ? Colaborador::find($r->id) : new Colaborador();
+                $Nuevo->sesion = $w->sesion;
+                $Nuevo->save();
                 return response()->json(['status' => 200, 'response' =>  $w]);
             } else {
                 return response()->json(['status' => 500, 'response' => 'Datos de inicio de sesión incorrectos']);
             }
-        } catch (Exception $e) {
-            return response()->json(['status' => 500, 'response' => 'Error de Inicio de sesion']);
+        } catch (Error $e) {
+            return response()->json(['status' => 500, 'response' => $e]);
         }
     }
 
@@ -163,6 +166,9 @@ public function Logout(Request $r){
         if ($dpass == $r->password) {
             $w->token = Str::random(60);
             $w->sesion = 0;
+            $Nuevo = $r->id ? Colaborador::find($r->id) : new Colaborador();
+            $Nuevo->sesion = $w->sesion;
+            $Nuevo->save();
             return response()->json(['status' => 200, 'response' => 'Sesión cerrada']);
         } else {
             return response()->json(['status' => 500, 'response' => 'Datos para cerrar sesión incorrectos']);
