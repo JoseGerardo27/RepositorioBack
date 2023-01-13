@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('folio')->nullable();
             $table->foreign('id_rol')->references('id')->on('rols')->onDelete('cascade'); // Padre e hijo eliminados
             $table->string('token');
-            $table->longText('contraseña');
+            $table->longText('password');
             $table->integer('sesion')->nullable();
         });
     }

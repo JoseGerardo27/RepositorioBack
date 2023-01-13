@@ -106,7 +106,7 @@ class ColaboradorController extends Controller
             $Nuevo->departamento = $r->departamento;
             $Nuevo->nombre = $r->nombre;
             $Nuevo->id_rol = $r->id_rol; //id_rol
-            $Nuevo->contraseña = Crypt::encryptString($r->contraseña);
+            $Nuevo->password = Crypt::encryptString($r->password);
             $b = Str::random(40);
             $Nuevo->token = $b;
             //Aqui comienza funcion guardar imagen
@@ -142,8 +142,8 @@ class ColaboradorController extends Controller
     {
         try {
             $w = Colaborador::where('id', $r->id)->first();
-            $dpass = Crypt::decryptString($w->contraseña);
-            if ($dpass == $r->contraseña) {
+            $dpass = Crypt::decryptString($w->password);
+            if ($dpass == $r->password) {
                 $w->token = Str::random(60);
                 $w->sesion = 1;
                 return response()->json(['status' => 200, 'response' =>  $w]);
@@ -159,8 +159,8 @@ class ColaboradorController extends Controller
 public function Logout(Request $r){
     try {
         $w = Colaborador::where('id', $r->id)->first();
-        $dpass = Crypt::decryptString($w->contraseña);
-        if ($dpass == $r->contraseña) {
+        $dpass = Crypt::decryptString($w->password);
+        if ($dpass == $r->password) {
             $w->token = Str::random(60);
             $w->sesion = 0;
             return response()->json(['status' => 200, 'response' => 'Sesión cerrada']);
