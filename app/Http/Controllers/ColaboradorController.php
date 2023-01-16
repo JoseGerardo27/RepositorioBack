@@ -179,6 +179,28 @@ public function Logout(Request $r){
     }
     }
 
+      /* Restauracion de contrasena */
+      public function NewPass(Request $r){
+        try{
+            //return 'entro';
+            $w = Colaborador::where('id', $r->id)->first();
+            $vp=Crypt::decryptString($w->password);
+            if($vp!=$r->password){
+                $w->password=Crypt::encryptString($r->password);
+                    if($w->save()){
+                        //$this->InsertPass($w->id,$r->pass); PARA EVALUAR QUE LAS CONTRASEÑAS NO SE REPITAN OTRA TABLA
+                        return response()->json(['status'=>200,'response'=>'Cambio de contraseñas exitoso']);
+                    }else{
+                        return response()->json(['status'=>500,'response'=>'Error al guardar la nueva contraseña']);
+                    }
+                }else{
+                    return response()->json(['status'=>500,'response'=>'La contraseña insertada debe ser diferente a la contraseña actual']);
+                }
+            }catch(Exception $e){
+                return response()->json(['status'=> 500, 'response'=>$e]);
+            }
+        }
+
 
 
 
