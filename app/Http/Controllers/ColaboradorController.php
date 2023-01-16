@@ -105,6 +105,7 @@ class ColaboradorController extends Controller
             $Nuevo = $r->id ? Colaborador::find($r->id) : new Colaborador();
             $Nuevo->departamento = $r->departamento;
             $Nuevo->nombre = $r->nombre;
+            $Nuevo->correo = $r->correo;
             $Nuevo->id_rol = $r->id_rol; //id_rol
             $Nuevo->password = Crypt::encryptString($r->password);
             $b = Str::random(40);

@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('colaboradors', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nombre');
+            $table->string('correo');
             $table->string('departamento');
             $table->string('doc_index')->nullable();
             $table->unsignedInteger('id_rol')->unsigned();

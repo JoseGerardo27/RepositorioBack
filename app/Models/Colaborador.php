@@ -12,7 +12,7 @@ class Colaborador extends Model
     public $timestamps =false ; // Cuando no se utilice el timestamps hacerlo false
 
     protected $fillable = [
-        'id', 'nombre', 'departamento', 'doc_index', 'id_rol', 'folio', 'token', 'password', 'sesion'
+        'id', 'nombre', 'departamento', 'doc_index', 'id_rol', 'folio', 'token', 'password', 'sesion', 'correo'
     ];
 
     public function Roles()
