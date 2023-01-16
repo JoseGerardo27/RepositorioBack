@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Filters\Search\FiltersP;
+use App\Mail\OrderShipped;
 use App\Models\Colaborador;
 use Exception;
 use Illuminate\Http\Request;
@@ -12,6 +13,8 @@ use Error;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Str;
 use App\Models\Checks as Checks;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class ColaboradorController extends Controller
 {
@@ -163,17 +166,17 @@ class ColaboradorController extends Controller
 public function Logout(Request $r){
     try {
         $w = Colaborador::where('id', $r->id)->first();
-        $dpass = Crypt::decryptString($w->password);
-        if ($dpass == $r->password) {
+      /*   $dpass = Crypt::decryptString($w->password);
+        if ($dpass == $r->password) { */
             $w->token = Str::random(60);
             $w->sesion = 0;
             $Nuevo = $r->id ? Colaborador::find($r->id) : new Colaborador();
             $Nuevo->sesion = $w->sesion;
             $Nuevo->save();
             return response()->json(['status' => 200, 'response' => 'Sesión cerrada']);
-        } else {
+        /* } else {
             return response()->json(['status' => 500, 'response' => 'Datos para cerrar sesión incorrectos']);
-        }
+        } */
     } catch (Exception $e) {
         return response()->json(['status' => 500, 'response' => 'Error al cerrar sesion']);
     }
@@ -181,6 +184,7 @@ public function Logout(Request $r){
 
       /* Restauracion de contrasena */
       public function NewPass(Request $r){
+        DB::beginTransaction();
         try{
             //return 'entro';
             $w = Colaborador::where('id', $r->id)->first();
@@ -189,6 +193,8 @@ public function Logout(Request $r){
                 $w->password=Crypt::encryptString($r->password);
                     if($w->save()){
                         //$this->InsertPass($w->id,$r->pass); PARA EVALUAR QUE LAS CONTRASEÑAS NO SE REPITAN OTRA TABLA
+                    return    $this->EmailAqui($w->id);
+
                         return response()->json(['status'=>200,'response'=>'Cambio de contraseñas exitoso']);
                     }else{
                         return response()->json(['status'=>500,'response'=>'Error al guardar la nueva contraseña']);
@@ -201,6 +207,22 @@ public function Logout(Request $r){
             }
         }
 
+         //funcion envio de email para colaborador ausente
+    public function EmailAqui($id)
+    {
+        try {
+            $Nuevo = Colaborador::where('id', $id)->first();
+            $email = $Nuevo->correo;
+             Mail::to($email)->send(new OrderShipped($Nuevo));
+            return 'entro';
+            if (count(Mail::failures()) > 0) {
+                return response()->json(['status' => 500, 'response' => 'Error de inserción de correo']);
+            }
+            return response()->json(['status' => 200, 'response' => 'Email enviado']);
+        } catch (Exception $e) {
+            return response()->json(['status' => 500, 'response' => $e]);
+        }
+    }
 
 
 

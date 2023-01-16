@@ -50,11 +50,10 @@
     <form class="form-register">
     @component('mail::message')
             <section >
-                <img class="girl center" src="{{ $image }}"  width="500" height="150" >
-                <h1 style="text-align:center;">{{ $msg }}</h1>
+                <h1 style="text-align:center;">cambio de contraseña</h1>
                 <center>
                     <div>
-                        <h3 style="text-align:center;">Estimad@ {{$name}}</h3>
+                        <h3 style="text-align:center;">Estimad@ {{$name}} con #Colaborador {{$id}}</h3>
                         <p>Se ha detectado un cambio de contraseña.</p>
                         <p><b>Para dudas o aclaraciones favor de consultar al departamento de Sistemas.</b></p>
                     </div>

@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\Colaborador;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -12,26 +13,17 @@ use Illuminate\Queue\SerializesModels;
 class OrderShipped extends Mailable
 {
     use Queueable, SerializesModels;
-
+    public $colab;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-
-     // php artisan make:mail OrderShipped
-    public function __construct($id_nom,$name)
+    public function __construct( $colab)
     {
-        $this->id_nom=$id_nom;
-        $this->name=$name;
-        $this->msg='Cambio de contraseña';
-        $this->image='public\images\grupo.jpg';
+        $this->colab=$colab;
     }
 
-    public function build()
-    {
-        return $this->subject($this->msg)->markdown('changePass',['id_nom'=>$this->id_nom,'image'=>$this->image,'msg'=>$this->msg,'name'=>$this->name]);
-    }
     /**
      * Get the message envelope.
      *
@@ -40,7 +32,7 @@ class OrderShipped extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: 'Order Shipped',
+            subject: 'PRUEBA JOSESITO',
         );
     }
 
@@ -52,7 +44,11 @@ class OrderShipped extends Mailable
     public function content()
     {
         return new Content(
-            view: 'view.name',
+            markdown: 'email.changePass',
+            with: [
+                'name' => $this->colab->nombre,
+                'id' => $this->colab->id,
+            ],
         );
     }
 
@@ -61,7 +57,7 @@ class OrderShipped extends Mailable
      *
      * @return array
      */
-    public function attachments()
+    public function attachments() // Archivos adjuntos
     {
         return [];
     }
