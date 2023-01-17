@@ -193,7 +193,7 @@ public function Logout(Request $r){
                 $w->password=Crypt::encryptString($r->password);
                     if($w->save()){
                         //$this->InsertPass($w->id,$r->pass); PARA EVALUAR QUE LAS CONTRASEÑAS NO SE REPITAN OTRA TABLA
-                    return    $this->EmailAqui($w->id);
+                    $this->EmailAqui($w->id);
 
                         return response()->json(['status'=>200,'response'=>'Cambio de contraseñas exitoso']);
                     }else{
