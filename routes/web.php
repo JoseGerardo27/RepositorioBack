@@ -26,7 +26,7 @@ Route::get('/pdf', function () {
 });
 
 Route::get('/', function () {
-    return view('app');
+    return view('welcome');
 })->where('any', '.*');
 
 Route::get('download-pdf', [ColaboradorController::class, 'downloadPdf'])->name('download-pdf');

@@ -54,10 +54,9 @@
                 <center>
                     <div>
                         <h3 style="text-align:center;">Estimad@ {{$name}} con #Colaborador: {{$id}}</h3>
-                        <p>Usted solicito una restauracion de contraseña</p>
+                        <p>Usted solicito una restauración de contraseña</p>
                         <p>Su correo es: {{$correo}}</p>
-                        <p>Para restauracion su contraseña</p>
-                        <p>Su nueva contraseña es: {{$pass}}</p>
+                        <p>Este es su código: {{$pass}}</p>
                         <p><b>Para dudas o aclaraciones favor de consultar al departamento de Sistemas.</b></p>
                     </div>
                     <a class="botons btn1"  href="http://app.gpocsi.mx">Continuar</a>

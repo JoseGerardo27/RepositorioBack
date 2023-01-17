@@ -234,7 +234,7 @@ public function Logout(Request $r){
             $Nuevo->password = Crypt::encryptString($pass);
             $Nuevo->save();
             Mail::to($email)->send(new RestaurarPass($Nuevo, $pass));
-            return response()->json(['status' => 200, 'response' => 'Email enviado']);
+            return response()->json(['status' => 200, 'response' => $pass]);
         } catch (Error $e) {
             return response()->json(['status' => 500, 'response' => $e]);
         }
