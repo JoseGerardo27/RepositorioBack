@@ -63,6 +63,7 @@ use Illuminate\Support\Facades\Storage;
     Route::get('/LogIn',[ColaboradorController::class,'LoginS'])->name('LogIn');
     Route::get('/LogOut',[ColaboradorController::class,'Logout'])->name('LogOut');
     Route::post('/ChangePass',[ColaboradorController::class,'NewPass'])->name('ChangePass');
+    Route::post('/RestaurarPass',[ColaboradorController::class,'EmailRestaurar'])->name('RestaurarPass');
 
 });
 

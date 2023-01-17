@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Filters\Search\FiltersP;
 use App\Mail\OrderShipped;
+use App\Mail\RestaurarPass;
 use App\Models\Colaborador;
 use Exception;
 use Illuminate\Http\Request;
@@ -182,11 +183,10 @@ public function Logout(Request $r){
     }
     }
 
-      /* Restauracion de contrasena */
+      /* Cambio de Contraseña */
       public function NewPass(Request $r){
         DB::beginTransaction();
         try{
-            //return 'entro';
             $w = Colaborador::where('id', $r->id)->first();
             $vp=Crypt::decryptString($w->password);
             if($vp!=$r->password){
@@ -207,6 +207,31 @@ public function Logout(Request $r){
             }
         }
 
+
+      /* Restaurar de Contraseña */
+      public function RestaurarPass(Request $r){
+        try{
+            $w = Colaborador::where('correo', $r->correo)->first();
+            return    $this->EmailAqui($w);
+            /* $vp=Crypt::decryptString($w->password);
+            if($vp!=$r->password){
+                $w->password=Crypt::encryptString($r->password);
+                    if($w->save()){
+                        //$this->InsertPass($w->id,$r->pass); PARA EVALUAR QUE LAS CONTRASEÑAS NO SE REPITAN OTRA TABLA
+                    return    $this->EmailAqui($w->id);
+
+                        return response()->json(['status'=>200,'response'=>'Cambio de contraseñas exitoso']);
+                    }else{
+                        return response()->json(['status'=>500,'response'=>'Error al guardar la nueva contraseña']);
+                    }
+                }else{
+                    return response()->json(['status'=>500,'response'=>'La contraseña insertada debe ser diferente a la contraseña actual']);
+                } */
+            }catch(Exception $e){
+                return response()->json(['status'=> 500, 'response'=>$e]);
+            }
+        }
+
          //funcion envio de email para colaborador ausente
     public function EmailAqui($id)
     {
@@ -214,12 +239,28 @@ public function Logout(Request $r){
             $Nuevo = Colaborador::where('id', $id)->first();
             $email = $Nuevo->correo;
              Mail::to($email)->send(new OrderShipped($Nuevo));
-            return 'entro';
             if (count(Mail::failures()) > 0) {
                 return response()->json(['status' => 500, 'response' => 'Error de inserción de correo']);
             }
             return response()->json(['status' => 200, 'response' => 'Email enviado']);
         } catch (Exception $e) {
+            return response()->json(['status' => 500, 'response' => $e]);
+        }
+    }
+
+    public function EmailRestaurar(Request $r)
+    {
+        try {
+            $Nuevo = Colaborador::where('correo', $r->correo)->first();
+            $email = $Nuevo->correo;
+            $caracteres_permitidos = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            $longitud = 12;
+            $pass = substr(str_shuffle($caracteres_permitidos), 0, $longitud);
+            $Nuevo->password = Crypt::encryptString($pass);
+            $Nuevo->save();
+            Mail::to($email)->send(new RestaurarPass($Nuevo, $pass));
+            return response()->json(['status' => 200, 'response' => 'Email enviado']);
+        } catch (Error $e) {
             return response()->json(['status' => 500, 'response' => $e]);
         }
     }
