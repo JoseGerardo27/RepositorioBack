@@ -61,6 +61,7 @@ class FiltersP
     {
         $w = (new Colaborador())->newQuery();
         !$r->id ?: $w->where('id', $r->id);
+        !$r->correo ?: $w->where('correo', $r->correo);
         !$r->nombre ?: $w->where('nombre', 'like', '%' . $r->nombre . '%');
         !$r->departamento ?: $w->where('departamento', 'like', '%' . $r->departamento . '%'); // Los . nos sirven para concatenar
         !$r->id_rol ?: $w->where('id_rol', $r->id_rol);

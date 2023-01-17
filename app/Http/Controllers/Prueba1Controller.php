@@ -79,7 +79,6 @@ class Prueba1Controller extends Controller
     {
         try {
             $eliminar = prueba1::find($id);
-
             $eliminar->delete();
             return response()->json([
                 'res' => true,

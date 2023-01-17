@@ -331,8 +331,17 @@ public function Logout(Request $r){
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $r)
     {
-        //
+        try{
+            $eliminar = (new FiltersP)->FilterColab($r);
+            $eliminar->delete();
+            return response()->json([
+                'res' => true,
+                'mensaje' => 'eliminado correctamente'
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json(['status' => 500, 'response' => $e]);
+        }
     }
 }
