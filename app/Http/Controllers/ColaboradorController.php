@@ -185,13 +185,14 @@ public function Logout(Request $r){
       /* Cambio de Contraseña */
       public function NewPass(Request $r){
         try{
+            $w = Colaborador::where('correo', $r->correo)->first();
             $w = Colaborador::where('id', $r->id)->first();
             $vp=Crypt::decryptString($w->password);
             if($vp!=$r->password){
                 $w->password=Crypt::encryptString($r->password);
                     if($w->save()){
                         //$this->InsertPass($w->id,$r->pass); PARA EVALUAR QUE LAS CONTRASEÑAS NO SE REPITAN OTRA TABLA
-                    $this->EmailAqui($w->id);
+                    //$this->EmailAqui($w->id);
                     $w->save();
                         return response()->json(['status'=>200,'response'=>'Cambio de contraseñas exitoso']);
                     }else{
@@ -200,7 +201,7 @@ public function Logout(Request $r){
                 }else{
                     return response()->json(['status'=>500,'response'=>'La contraseña insertada debe ser diferente a la contraseña actual']);
                 }
-            }catch(Exception $e){
+            }catch(Error $e){
                 return response()->json(['status'=> 500, 'response'=>$e]);
             }
         }
