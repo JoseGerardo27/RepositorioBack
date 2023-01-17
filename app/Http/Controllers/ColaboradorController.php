@@ -153,10 +153,9 @@ class ColaboradorController extends Controller
                 $w->sesion = 1;
                 $Nuevo = $r->id ? Colaborador::find($r->id) : new Colaborador();
                 $Nuevo->sesion = $w->sesion;
-                $Nuevo->save();
                 return response()->json(['status' => 200, 'response' =>  $w]);
             } else {
-                return response()->json(['status' => 500, 'response' => 'Datos de inicio de sesión incorrectos']);
+                return response()->json(['status' => 500, 'response' => $r]);
             }
         } catch (Error $e) {
             return response()->json(['status' => 500, 'response' => $e]);
@@ -185,7 +184,6 @@ public function Logout(Request $r){
 
       /* Cambio de Contraseña */
       public function NewPass(Request $r){
-        DB::beginTransaction();
         try{
             $w = Colaborador::where('id', $r->id)->first();
             $vp=Crypt::decryptString($w->password);
@@ -194,7 +192,7 @@ public function Logout(Request $r){
                     if($w->save()){
                         //$this->InsertPass($w->id,$r->pass); PARA EVALUAR QUE LAS CONTRASEÑAS NO SE REPITAN OTRA TABLA
                     $this->EmailAqui($w->id);
-
+                    $w->save();
                         return response()->json(['status'=>200,'response'=>'Cambio de contraseñas exitoso']);
                     }else{
                         return response()->json(['status'=>500,'response'=>'Error al guardar la nueva contraseña']);
@@ -208,35 +206,12 @@ public function Logout(Request $r){
         }
 
 
-      /* Restaurar de Contraseña */
-      public function RestaurarPass(Request $r){
-        try{
-            $w = Colaborador::where('correo', $r->correo)->first();
-            return    $this->EmailAqui($w);
-            /* $vp=Crypt::decryptString($w->password);
-            if($vp!=$r->password){
-                $w->password=Crypt::encryptString($r->password);
-                    if($w->save()){
-                        //$this->InsertPass($w->id,$r->pass); PARA EVALUAR QUE LAS CONTRASEÑAS NO SE REPITAN OTRA TABLA
-                    return    $this->EmailAqui($w->id);
-
-                        return response()->json(['status'=>200,'response'=>'Cambio de contraseñas exitoso']);
-                    }else{
-                        return response()->json(['status'=>500,'response'=>'Error al guardar la nueva contraseña']);
-                    }
-                }else{
-                    return response()->json(['status'=>500,'response'=>'La contraseña insertada debe ser diferente a la contraseña actual']);
-                } */
-            }catch(Exception $e){
-                return response()->json(['status'=> 500, 'response'=>$e]);
-            }
-        }
-
-         //funcion envio de email para colaborador ausente
+         //funcion envio de email para cambio contraseña
     public function EmailAqui($id)
     {
         try {
             $Nuevo = Colaborador::where('id', $id)->first();
+            $Nuevo->save();
             $email = $Nuevo->correo;
              Mail::to($email)->send(new OrderShipped($Nuevo));
             if (count(Mail::failures()) > 0) {
