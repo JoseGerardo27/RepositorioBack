@@ -21,10 +21,10 @@ return new class extends Migration
             $table->string('doc_index')->nullable();
             $table->unsignedInteger('id_rol')->unsigned();
             $table->string('folio')->nullable();
-            $table->foreign('id_rol')->references('id')->on('rols')->onDelete('cascade'); // Padre e hijo eliminados
             $table->string('token');
             $table->longText('password');
             $table->integer('sesion')->nullable();
+            $table->string('roles')->nullable();
         });
     }
 

@@ -34,8 +34,9 @@ class ColaboradorController extends Controller
     {
         try {
             $w = (new FiltersP)->FilterColab($r);
+            // $arreglo[] = json_decode($w->roles);
             return response()->json(['status' => 200, 'response' => $w]);
-        } catch (Exception $e) {
+        } catch (Error $e) {
             return response()->json(['status' => 500, 'response' => $e]);
         }
     }
@@ -134,8 +135,11 @@ class ColaboradorController extends Controller
                     $n++;
                 }
                 $Nuevo->doc_index = json_encode($lc);
-                $Nuevo->save();
             }
+
+            //Agregar un arreglo
+            $Nuevo->roles = json_encode($r->roles);
+            $Nuevo->save();
             return response()->json(['status' => 200, 'response' => 'insertado correctamente']);
         } catch (Error $e) {
             return response()->json(['status' => 500, 'response' => $e]);
