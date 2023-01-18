@@ -104,6 +104,7 @@ class ColaboradorController extends Controller
     //     }
     // }
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     public function store(Request $r)
     {
         try {
@@ -127,6 +128,7 @@ class ColaboradorController extends Controller
             }
             if ($r->doc_index) {
                 $n = 1;
+                //$encode = json_encode($Nuevo->doc_index) ;
                 foreach ($r['doc_index'] as $value) {
                     $a = $this->FileSaveMultiples($Nuevo->doc_index, $value['nombre'], $value['base64'], $Nuevo->folio, $n);
                     if ($a) {
@@ -281,9 +283,9 @@ public function Logout(Request $r){
     public function NuevoDocumento(Request $r)
     {
         try {
-            $dg = Colaborador::select('doc_index')->where('id', $r->id)->first();
-            return response()->file(public_path() . '\storage\workers\\' . $dg->doc_index);
-        } catch (Exception $e) {
+            $dg = Colaborador::where('id', $r->id)->first();
+            return response()->file(public_path() . '\storage\workers\\' .$dg->folio.'_doc\\'. $r->doc_index);
+        } catch (Error $e) {
             return response()->json(['status' => 500, 'response' => $e]);
         }
     }

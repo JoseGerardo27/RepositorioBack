@@ -9,6 +9,7 @@ use App\Models\Prueba2;
 use App\Models\prueba3;
 use App\Models\Rol;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 
 class FiltersP
 {
@@ -90,6 +91,10 @@ class FiltersP
         // hacer llegar en arreglo al front
         foreach ($w as $wa) {
             $wa->roles = json_decode($wa->roles);
+        }
+
+        foreach ($w as $wa) {
+            $wa->doc_index = json_decode($wa->doc_index);
         }
         return $w;
     }
