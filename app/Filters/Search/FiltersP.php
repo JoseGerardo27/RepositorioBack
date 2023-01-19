@@ -22,7 +22,7 @@ class FiltersP
         ];
         $this->Roles = [
             8 => 'Junta', 7 => 'Investigar necesidades', 6 => 'Diseñar nuevo proyecto', 5 => 'Pruebas', 4 => 'Documentar', 3 => 'Corregir errores ',
-            2 => 'Lavar baño', 1 => 'Presentacion de informe'
+            2 => 'Lavar bano', 1 => 'Presentacion de informe'
         ];
         $this->Departamentos = [
             8 => 'Direccion', 7 => 'Desarrollo Organizacional', 6 => 'Contabilidad', 5 => 'Pruebas', 4 => 'Compras', 3 => 'Calidad',
@@ -104,14 +104,21 @@ class FiltersP
             });
         } */
 
+// crear arreglo y agregarle roles y nombre
+
         $w = $w->with('DepartamentoNombre')->get();
         // hacer llegar en arreglo al front
         foreach ($w as $wa) {
             $wa->roles = json_decode($wa->roles);
+            $Nombre_Rol = array();
             foreach($wa->roles as $prr2)
             {
-                $temporal2 = intval($prr2);
-                $wa->NombreS_Rol = $temporal2 < 9 ? $this->Roles[$temporal2] : 'El rol no existe';
+                if($prr2>8){array_push($Nombre_Rol,'El rol no existe');}
+                else{
+                  $temporal2 = intval($prr2);
+                array_push($Nombre_Rol, $this->Roles[$temporal2]);
+                $wa->Names_Rols = $Nombre_Rol;
+                }
             }
         }
             $wa->doc_index = json_decode($wa->doc_index);

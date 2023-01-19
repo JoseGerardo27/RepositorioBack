@@ -35,7 +35,7 @@ class ColaboradorController extends Controller
         try {
             $w = (new FiltersP)->FilterColab($r);
             return response()->json(['status' => 200, 'response' => $w]);
-        } catch (Error $e) {
+        } catch (Exception $e) {
             return response()->json(['status' => 500, 'response' => $e]);
         }
     }
@@ -144,7 +144,7 @@ class ColaboradorController extends Controller
             $Nuevo->roles = json_encode($r->roles);
             $Nuevo->save();
             return response()->json(['status' => 200, 'response' => 'insertado correctamente']);
-        } catch (Error $e) {
+        } catch (Exception $e) {
             return response()->json(['status' => 500, 'response' => $e]);
         }
     }
@@ -164,7 +164,7 @@ class ColaboradorController extends Controller
             } else {
                 return response()->json(['status' => 500, 'response' => $r]);
             }
-        } catch (Error $e) {
+        } catch (Exception $e) {
             return response()->json(['status' => 500, 'response' => $e]);
         }
     }
@@ -208,7 +208,7 @@ public function Logout(Request $r){
                 }else{
                     return response()->json(['status'=>500,'response'=>'La contraseña insertada debe ser diferente a la contraseña actual']);
                 }
-            }catch(Error $e){
+            }catch(Exception $e){
                 return response()->json(['status'=> 500, 'response'=>$e]);
             }
         }
@@ -243,7 +243,7 @@ public function Logout(Request $r){
             $Nuevo->save();
             Mail::to($email)->send(new RestaurarPass($Nuevo, $pass));
             return response()->json(['status' => 200, 'response' => $pass]);
-        } catch (Error $e) {
+        } catch (Exception $e) {
             return response()->json(['status' => 500, 'response' => $e]);
         }
     }
@@ -286,7 +286,7 @@ public function Logout(Request $r){
         try {
             $dg = Colaborador::where('id', $r->id)->first();
             return response()->file(public_path() . '\storage\workers\\' .$dg->folio.'_doc\\'. $r->doc_index);
-        } catch (Error $e) {
+        } catch (Exception $e) {
             return response()->json(['status' => 500, 'response' => $e]);
         }
     }
