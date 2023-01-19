@@ -15,6 +15,10 @@ class Colaborador extends Model
         'id', 'nombre', 'departamento', 'doc_index', 'id_rol', 'folio', 'token', 'password', 'sesion', 'correo'
     ];
 
+    public function DepartamentoNombre()
+{
+    return $this->hasOne(Departamento::class, 'id','departamento');
+}
     public function Roles()
     {
         return $this->hasMany(Rol::class, 'id', 'id_rol');

@@ -17,14 +17,14 @@ return new class extends Migration
             $table->increments('id');
             $table->string('nombre');
             $table->string('correo');
-            $table->string('departamento');
+            $table->integer('departamento')->unsigned();
             $table->string('doc_index')->nullable();
-            $table->unsignedInteger('id_rol')->unsigned();
             $table->string('folio')->nullable();
             $table->string('token');
             $table->longText('password');
             $table->integer('sesion')->nullable();
             $table->string('roles')->nullable();
+            $table->foreign('departamento')->references('id')->on('departamentos')->onDelete('cascade');
         });
     }
 

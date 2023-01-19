@@ -34,7 +34,6 @@ class ColaboradorController extends Controller
     {
         try {
             $w = (new FiltersP)->FilterColab($r);
-            // $arreglo[] = json_decode($w->roles);
             return response()->json(['status' => 200, 'response' => $w]);
         } catch (Error $e) {
             return response()->json(['status' => 500, 'response' => $e]);
@@ -109,16 +108,18 @@ class ColaboradorController extends Controller
     {
         try {
             $Nuevo = $r->id ? Colaborador::find($r->id) : new Colaborador();
-            $Nuevo->departamento = $r->departamento;
             $Nuevo->nombre = $r->nombre;
             $Nuevo->correo = $r->correo;
-            $Nuevo->id_rol = $r->id_rol; //id_rol
+            // $Nuevo->id_rol = $r->id_rol; //id_rol
             $Nuevo->password = Crypt::encryptString($r->password);
             $b = Str::random(40);
             $Nuevo->token = $b;
             //Aqui comienza funcion guardar imagen
             $fm = Colaborador::all()->count();
             $n = 1;
+
+            $Nuevo->departamento = $r->departamento;
+
             if (empty($Nuevo->folio)) {
                 do {
                     $Nuevo->folio = 'AV-' . str_pad($fm + $n, 4, "0", STR_PAD_LEFT);

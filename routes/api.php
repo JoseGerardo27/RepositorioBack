@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ColaboradorController;
+use App\Http\Controllers\DepartamentoController;
 use App\Http\Controllers\ListaController;
 use App\Http\Controllers\Prueba1Controller;
 use App\Http\Controllers\Prueba2Controller;
@@ -36,6 +37,7 @@ use Illuminate\Support\Facades\Storage;
     Route::get('/colaboradores',[ColaboradorController::class, 'index2'])->name('colaboradores');
     Route::get('/roles',[RolController::class, 'index'])->name('roles');
     Route::get('/listas',[ListaController::class, 'index'])->name('listas');
+    Route::get('/departamento',[DepartamentoController::class, 'index'])->name('departamento');
     //PDF
     Route::get('/PDF',[ColaboradorController::class, 'downloadPdf'])->name('PDF');
     Route::get('/PDFx1',[ColaboradorController::class, 'downloadPdfx1'])->name('PDF');
