@@ -141,7 +141,9 @@ class ColaboradorController extends Controller
             }
 
             //Agregar un arreglo
-            $Nuevo->roles = json_encode($r->roles);
+            $ap = [];
+            array_push($ap, $r->roles);
+            $Nuevo->roles = json_encode($ap);
             $Nuevo->save();
             return response()->json(['status' => 200, 'response' => 'insertado correctamente']);
         } catch (Exception $e) {
