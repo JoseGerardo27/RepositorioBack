@@ -105,12 +105,13 @@ class FiltersP
         } */
 
 // crear arreglo y agregarle roles y nombre
-
+        $empleado = Colaborador::where('id', 1)->get();
         $w = $w->with('DepartamentoNombre')->get();
         // hacer llegar en arreglo al front
         foreach ($w as $wa) {
             $wa->roles = json_decode($wa->roles);
             $Nombre_Rol = array();
+           unset($wa->DepartamentoNombre->id, $wa->DepartamentoNombre->nomenclature);
             foreach($wa->roles as $prr2)
             {
                 if($prr2>8){array_push($Nombre_Rol,'El rol no existe');}
