@@ -110,19 +110,21 @@ class FiltersP
         // hacer llegar en arreglo al front
         foreach ($w as $wa) {
             $wa->roles = json_decode($wa->roles);
+            {
+            $wa->doc_index = json_decode($wa->doc_index);
             $Nombre_Rol = array();
            unset($wa->DepartamentoNombre->id, $wa->DepartamentoNombre->nomenclature);
             foreach($wa->roles as $prr2)
-            {
                 if($prr2>8){array_push($Nombre_Rol,'El rol no existe');}
                 else{
                   $temporal2 = intval($prr2);
                 array_push($Nombre_Rol, $this->Roles[$temporal2]);
                 $wa->Names_Rols = $Nombre_Rol;
                 }
+
             }
         }
-            $wa->doc_index = json_decode($wa->doc_index);
+
         return $w;
     }
 
