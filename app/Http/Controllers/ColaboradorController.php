@@ -127,26 +127,26 @@ class ColaboradorController extends Controller
                 } while (!empty(Colaborador::where('folio', $Nuevo->folio)->first()));
                 $Nuevo->save();
             }
-            if ($r->doc_index) {
+           $lc=array();
+           if ($r->doc_index) {
                 $n = 1;
                 //$encode = json_encode($Nuevo->doc_index) ;
                 foreach ($r['doc_index'] as $value) {
                     $a = $this->FileSaveMultiples($Nuevo->doc_index, $value['nombre'], $value['base64'], $Nuevo->folio, $n);
                     if ($a) {
-                        $lc[] = $a;
+                        array_push($lc, $a);
                     }
                     $n++;
                 }
-                $Nuevo->doc_index = json_encode($lc);
             }
-
+            $Nuevo->doc_index = json_encode($lc);
             //Agregar un arreglo
             $ap = [];
             array_push($ap, $r->roles);
             $Nuevo->roles = json_encode($ap);
             $Nuevo->save();
             return response()->json(['status' => 200, 'response' => 'insertado correctamente']);
-        } catch (Exception $e) {
+        } catch (Error $e) {
             return response()->json(['status' => 500, 'response' => $e]);
         }
     }
