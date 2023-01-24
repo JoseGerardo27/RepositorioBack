@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Filters\Search\FiltersP;
+use App\Mail\NewUser;
 use App\Mail\OrderShipped;
 use App\Mail\RestaurarPass;
 use App\Models\Colaborador;
@@ -127,8 +128,8 @@ class ColaboradorController extends Controller
                 } while (!empty(Colaborador::where('folio', $Nuevo->folio)->first()));
                 $Nuevo->save();
             }
-           $lc=array();
-           if ($r->doc_index) {
+            $lc = array();
+            if ($r->doc_index) {
                 $n = 1;
                 //$encode = json_encode($Nuevo->doc_index) ;
                 foreach ($r['doc_index'] as $value) {
@@ -151,7 +152,7 @@ class ColaboradorController extends Controller
         }
     }
 
-// Inicio de Sesion
+    // Inicio de Sesion
     public function LoginS(Request $r)
     {
         try {
@@ -171,11 +172,12 @@ class ColaboradorController extends Controller
         }
     }
 
-// Cerrar Sesion
-public function Logout(Request $r){
-    try {
-        $w = Colaborador::where('id', $r->id)->first();
-      /*   $dpass = Crypt::decryptString($w->password);
+    // Cerrar Sesion
+    public function Logout(Request $r)
+    {
+        try {
+            $w = Colaborador::where('id', $r->id)->first();
+            /*   $dpass = Crypt::decryptString($w->password);
         if ($dpass == $r->password) { */
             $w->token = Str::random(60);
             $w->sesion = 0;
@@ -183,47 +185,61 @@ public function Logout(Request $r){
             $Nuevo->sesion = $w->sesion;
             $Nuevo->save();
             return response()->json(['status' => 200, 'response' => 'Sesión cerrada']);
-        /* } else {
+            /* } else {
             return response()->json(['status' => 500, 'response' => 'Datos para cerrar sesión incorrectos']);
         } */
-    } catch (Exception $e) {
-        return response()->json(['status' => 500, 'response' => 'Error al cerrar sesion']);
-    }
+        } catch (Exception $e) {
+            return response()->json(['status' => 500, 'response' => 'Error al cerrar sesion']);
+        }
     }
 
-      /* Cambio de Contraseña */
-      public function NewPass(Request $r){
-        try{
+    /* Cambio de Contraseña */
+    public function NewPass(Request $r)
+    {
+        try {
             $w = Colaborador::where('correo', $r->correo)->first();
             $w = Colaborador::where('id', $r->id)->first();
-            $vp=Crypt::decryptString($w->password);
-            if($vp!=$r->password){
-                $w->password=Crypt::encryptString($r->password);
-                    if($w->save()){
-                        //$this->InsertPass($w->id,$r->pass); PARA EVALUAR QUE LAS CONTRASEÑAS NO SE REPITAN OTRA TABLA
+            $vp = Crypt::decryptString($w->password);
+            if ($vp != $r->password) {
+                $w->password = Crypt::encryptString($r->password);
+                if ($w->save()) {
+                    //$this->InsertPass($w->id,$r->pass); PARA EVALUAR QUE LAS CONTRASEÑAS NO SE REPITAN OTRA TABLA
                     $this->EmailAqui($w->id);
                     $w->save();
-                        return response()->json(['status'=>200,'response'=>'Cambio de contraseñas exitoso']);
-                    }else{
-                        return response()->json(['status'=>500,'response'=>'Error al guardar la nueva contraseña']);
-                    }
-                }else{
-                    return response()->json(['status'=>500,'response'=>'La contraseña insertada debe ser diferente a la contraseña actual']);
+                    return response()->json(['status' => 200, 'response' => 'Cambio de contraseñas exitoso']);
+                } else {
+                    return response()->json(['status' => 500, 'response' => 'Error al guardar la nueva contraseña']);
                 }
-            }catch(Exception $e){
-                return response()->json(['status'=> 500, 'response'=>$e]);
+            } else {
+                return response()->json(['status' => 500, 'response' => 'La contraseña insertada debe ser diferente a la contraseña actual']);
             }
+        } catch (Exception $e) {
+            return response()->json(['status' => 500, 'response' => $e]);
         }
+    }
 
 
-         //funcion envio de email para cambio contraseña
+    public function FuncionXTiempo(Request $id)
+    {
+        try {
+            $Nuevo = Colaborador::where('id', $id->id)->first();
+            $Nuevo->save();
+            $email = $Nuevo->correo;
+            Mail::to($email)->send(new NewUser($Nuevo));
+            return response()->json(['status' => 200, 'response' => 'Email enviado']);
+        } catch (Exception $e) {
+            return response()->json(['status' => 500, 'response' => $e]);
+        }
+    }
+
+    //funcion envio de email para cambio contraseña
     public function EmailAqui($id)
     {
         try {
             $Nuevo = Colaborador::where('id', $id)->first();
             $Nuevo->save();
             $email = $Nuevo->correo;
-             Mail::to($email)->send(new OrderShipped($Nuevo));
+            Mail::to($email)->send(new OrderShipped($Nuevo));
             if (count(Mail::failures()) > 0) {
                 return response()->json(['status' => 500, 'response' => 'Error de inserción de correo']);
             }
@@ -287,7 +303,7 @@ public function Logout(Request $r){
     {
         try {
             $dg = Colaborador::where('id', $r->id)->first();
-            return response()->file(public_path() . '\storage\workers\\' .$dg->folio.'_doc\\'. $r->doc_index);
+            return response()->file(public_path() . '\storage\workers\\' . $dg->folio . '_doc\\' . $r->doc_index);
         } catch (Exception $e) {
             return response()->json(['status' => 500, 'response' => $e]);
         }
@@ -343,7 +359,7 @@ public function Logout(Request $r){
      */
     public function destroy(Request $r)
     {
-        try{
+        try {
             $eliminar = (new FiltersP)->FilterColab($r);
             $eliminar->delete();
             return response()->json([

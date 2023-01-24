@@ -67,6 +67,8 @@ use Illuminate\Support\Facades\Storage;
     Route::post('/ChangePass',[ColaboradorController::class,'NewPass'])->name('ChangePass');
     Route::post('/RestaurarPass',[ColaboradorController::class,'EmailRestaurar'])->name('RestaurarPass');
 
+    Route::post('/CorreoPrueba',[ColaboradorController::class,'FuncionXTiempo'])->name('FuncionXTiempo');
+
 });
 
 

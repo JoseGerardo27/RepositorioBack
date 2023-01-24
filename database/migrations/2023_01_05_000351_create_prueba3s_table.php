@@ -17,7 +17,6 @@ return new class extends Migration
             $table->increments('id');
             $table->integer('Numero')->unsigned();
             $table->integer('Deporte');
-            $table->foreign('Numero')->references('Numero')->on('prueba1s')->onDelete('cascade');
         });
     }
 

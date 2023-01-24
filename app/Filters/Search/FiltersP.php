@@ -111,7 +111,7 @@ class FiltersP
         foreach ($w as $wa) {
             $wa->roles = json_decode($wa->roles);
             {
-            $wa->doc_index = json_decode($wa->doc_index);
+                $wa->doc_index = json_decode($wa->doc_index);
             $Nombre_Rol = array();
            unset($wa->DepartamentoNombre->id, $wa->DepartamentoNombre->nomenclature);
             foreach($wa->roles as $prr2)

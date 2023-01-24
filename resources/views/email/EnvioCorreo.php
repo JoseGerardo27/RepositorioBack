@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-    {{--   <link rel="stylesheet" href={{ URL::to("/css/reset_email.css") }} alt=''/> --}}
+    <!-- {{--   <link rel="stylesheet" href={{ URL::to("/css/reset_email.css") }} alt=''/> --}} -->
     <style>
         .girl img{
             width: 150px;
@@ -47,10 +47,9 @@
 </head>
 <body>
 
-    <form class="form-register">
-    @component('mail::message')
+    <form class="form-register" >
             <section >
-                <h1 style="text-align:center;">cambio de contraseña</h1>
+                <h1 style="text-align:center;" color>BIENVENIDO</h1>
                 <center>
                     <div>
                         <h3 style="text-align:center;">Su usuario ha sido creado con éxito</h3>
@@ -60,7 +59,6 @@
                     <a class="botons btn1"  href="http://app.gpocsi.mx">Continuar</a>
                 </center>
             </section>
-            @endcomponent
         </form>
 
 </body>

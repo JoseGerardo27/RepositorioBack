@@ -2,7 +2,6 @@
 
 namespace App\Mail;
 
-use App\Models\Colaborador;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -10,18 +9,18 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class OrderShipped extends Mailable
+class NewUser extends Mailable
 {
     use Queueable, SerializesModels;
-    public $colab;
+
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct( $colab)
+    public function __construct()
     {
-        $this->colab=$colab;
+        //
     }
 
     /**
@@ -32,7 +31,7 @@ class OrderShipped extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: 'PRUEBA',
+            subject: 'New User',
         );
     }
 
@@ -44,11 +43,7 @@ class OrderShipped extends Mailable
     public function content()
     {
         return new Content(
-            markdown: 'email.changePass',
-            with: [
-                'name' => $this->colab->nombre,
-                'id' => $this->colab->id,
-            ],
+            view: 'email.EnvioCorreo',
         );
     }
 
@@ -57,7 +52,7 @@ class OrderShipped extends Mailable
      *
      * @return array
      */
-    public function attachments() // Archivos adjuntos
+    public function attachments()
     {
         return [];
     }

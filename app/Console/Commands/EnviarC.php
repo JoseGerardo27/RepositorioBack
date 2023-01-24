@@ -2,26 +2,26 @@
 
 namespace App\Console\Commands;
 
+use App\Mail\NewUser;
 use App\Models\Colaborador;
-use GuzzleHttp\Psr7\Request;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
-class Prueba extends Command
+class EnviarC extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-        protected $signature = 'prueba1:prueba';
+    protected $signature = 'Envio:correo';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'envia correos cada 1 min';
+    protected $description = 'envia correo';
 
     /**
      * Execute the console command.
@@ -30,7 +30,7 @@ class Prueba extends Command
      */
     public function handle()
     {
-        Colaborador::where('departamento', 15)->update(['sesion'=>5]);
+        $Nuevo = Colaborador::where('id', 1)->first();
+        Mail::to('adan.gonzalez@gpocsi.mx')->send(new NewUser($Nuevo));
     }
 }
-
