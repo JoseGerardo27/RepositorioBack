@@ -3,6 +3,7 @@
 use App\Http\Controllers\ColaboradorController;
 use App\Http\Controllers\DepartamentoController;
 use App\Http\Controllers\ListaController;
+use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\Prueba1Controller;
 use App\Http\Controllers\Prueba2Controller;
 use App\Http\Controllers\Prueba3Controller;
@@ -30,6 +31,38 @@ use Illuminate\Support\Facades\Storage;
 
     // Middleware para enviar todas las routes Web
     Route::middleware('api')->group(function() {
+
+
+// ------------------COTIZADORRRRRRRRRRRR-------------------------
+
+Route::get('/cotizaciones',[ProjectController::class, 'index'])->name('cotizaciones');
+
+Route::post('/newCotizacion',[ProjectController::class, 'store'])->name('newCotizacion');
+Route::post('/cancelar',[ProjectController::class, 'Cancelado'])->name('cancelar');
+Route::post('/firma',[ProjectController::class, 'firma'])->name('firma');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//----------------------------------------------------------------------
+
+
+
+
+
+
+
+
     //Mostrar registros
     Route::get('/prueba1',[Prueba1Controller::class, 'index'])->name('prueba1');
     Route::get('/prueba2',[Prueba2Controller::class, 'index2'])->name('prueba2');

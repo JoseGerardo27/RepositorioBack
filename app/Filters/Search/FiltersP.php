@@ -5,6 +5,7 @@ namespace App\Filters\Search;
 use App\Models\Colaborador;
 use App\Models\Departamento;
 use App\Models\Lista;
+use App\Models\ProyectoCot;
 use App\Models\prueba1;
 use App\Models\Prueba2;
 use App\Models\prueba3;
@@ -95,7 +96,7 @@ class FiltersP
             });
         }
 
-       /*  if ($r->departamento) {
+        /*  if ($r->departamento) {
             $w3 =  explode(',', $r->departamento);
             $w->where(function ($p) use ($w3) {
                 foreach ($w3 as $wa) {
@@ -104,24 +105,23 @@ class FiltersP
             });
         } */
 
-// crear arreglo y agregarle roles y nombre
+        // crear arreglo y agregarle roles y nombre
         $empleado = Colaborador::where('id', 1)->get();
         $w = $w->with('DepartamentoNombre')->get();
         // hacer llegar en arreglo al front
         foreach ($w as $wa) {
-            $wa->roles = json_decode($wa->roles);
-            {
+            $wa->roles = json_decode($wa->roles); {
                 $wa->doc_index = json_decode($wa->doc_index);
-            $Nombre_Rol = array();
-           unset($wa->DepartamentoNombre->id, $wa->DepartamentoNombre->nomenclature);
-            foreach($wa->roles as $prr2)
-                if($prr2>8){array_push($Nombre_Rol,'El rol no existe');}
-                else{
-                  $temporal2 = intval($prr2);
-                array_push($Nombre_Rol, $this->Roles[$temporal2]);
-                $wa->Names_Rols = $Nombre_Rol;
-                }
-
+                $Nombre_Rol = array();
+                unset($wa->DepartamentoNombre->id, $wa->DepartamentoNombre->nomenclature);
+                foreach ($wa->roles as $prr2)
+                    if ($prr2 > 8) {
+                        array_push($Nombre_Rol, 'El rol no existe');
+                    } else {
+                        $temporal2 = intval($prr2);
+                        array_push($Nombre_Rol, $this->Roles[$temporal2]);
+                        $wa->Names_Rols = $Nombre_Rol;
+                    }
             }
         }
 
@@ -160,6 +160,50 @@ class FiltersP
         !$r->equipo ?: $w->where('equipo', $r->Deporte);
         !$r->nombre ?: $w->where('nombre', 'like', '%' . $r->nombre . '%');
         $w = $w->get();
+        return $w;
+    }
+
+
+
+
+
+    // --------------------------------------COTIZADOR-------------------------------------
+
+
+    public function FilterCotizador(Request $r)
+    {
+        $w = (new ProyectoCot)->newQuery();
+        !$r->id ?: $w->where('id', $r->id);
+        !$r->id_worker ?: $w->where('id_worker', $r->id_worker);
+        !$r->id_assistant ?: $w->where('id_assistant', $r->id_assistant);
+        !$r->id_client ?: $w->where('id_client', $r->id_client);
+        !$r->id_proyect ?: $w->where('id_proyect', $r->id_proyect);
+        !$r->city ?: $w->where('city', $r->city);
+        !$r->id_father ?: $w->where('id_father', $r->id_father);
+        !$r->value ?: $w->where('value', $r->value);
+
+        !$r->active ?: $w->where('active', $r->active);
+        !$r->cancel ?: $w->where('cancel', $r->cancel);
+        !$r->startC ?: $w->where('created_at', '>=', $r->startC);
+        !$r->endsC ?: $w->where('created_at', '<=', $r->endsC);
+
+        !$r->startU ?: $w->where('updated_at', '>=', $r->startU);
+        !$r->endsU ?: $w->where('updated_at', '<=', $r->endsU);
+
+        if ($r->product_list) {
+            $w2 =  explode(',', $r->product_list);
+            $w->where(function ($q) use ($w2) {
+                foreach ($w2 as $wa) {
+                    $q->orWhereJsonContains('product_list', $wa);
+                }
+            });
+        }
+
+        $w = $w->get();
+        foreach ($w as $wa) {
+            $wa->product_list = json_decode($wa->product_list);
+        }
+
         return $w;
     }
 }
